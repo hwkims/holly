@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Mirrored from www.hollys.co.kr/hollysIs/location/pop/locationPop.do by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 12 Jun 2024 08:08:02 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+	<title>HOLLYS</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta charset="UTF-8" />
+
+	<link rel="stylesheet" type="text/css" href="../../../websrc/css/design.css" />
+
+	<script type="text/javascript" src="../../../websrc/js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="../../../websrc/js/json2.js"></script>
+
+	<script type="text/javascript" src="../../../websrc/js/d2CommonUtil.js"></script>
+	<script type="text/javascript" src="../../../websrc/js/common-JsonData.js"></script>
+	<script type="text/javascript" src="../../../websrc/js/common.js"></script>
+	<script type="text/javascript" src="../../../websrc/js/style.js"></script>
+
+			<script type="text/javascript" src="../../../websrc/js/jquery.form.stylishSelect.js"></script>
+	</head>
+
+<body style="text-align:center">
+
+	
+<script type="text/javascript" src="../../../../dapi.kakao.com/v2/maps/sdkbb30.json?appkey=1b83c45dd9d7a6ffbca57a0bceb5fd5a&amp;libraries=services"></script>
+<script language="javascript">  
+
+	 $(function() {
+	 	//var contents = window.opener.document.getElementById("map_canvas");
+     	var wnd = opener.document;
+     	
+     	var pno = $(wnd).find("#accessibility").attr('class').slice(-1);
+     	var sname = ['본사','아카데미 서울', '아카데미 부산', '로스팅센터', '물류센터'];
+		var sadd = ['서울특별시 종로구 율곡로 88', '서울시 종로구 대학로10길 11', '부산광역시 중구 광복동2가 24-1', '경기도 파주시 문산읍 돈유3로 87', '경기도 광주시 초월읍 신월리 652'];
+		var sphone = ['02-2188-7100', '02-2188-7100', '070-7701-9425', '070-7734-3785', '031-8028-7000'];
+     	
+     	var tname = $('.tableType01').find('tr').eq(0).find('td');
+     	var tadd = $('.tableType01').find('tr').eq(1).find('td');
+     	var tphone = $('.tableType01').find('tr').eq(2).find('td');
+     	
+     	tname.append(sname[pno]);
+		if (pno == 0) { //본사 위치는 google 주소와 틀림
+			tadd.append("서울특별시 중구 통일로 92");
+		} else {
+			tadd.append(sadd[pno]);
+		}
+     	tphone.append(sphone[pno]);
+     	
+     	var geocoder;
+		var map;
+		
+		function initialize() {
+			var locX = 37.5636663;
+			var locY = 126.9692587;
+		var address = sadd[pno];
+								var mapContainer = document.getElementById('map_canvas');
+	
+									var mapOption = {
+		        center: new daum.maps.LatLng(locX, locY),
+		        level: 3
+		    };
+	
+						var map = new daum.maps.Map(mapContainer, mapOption);
+	
+			var imageSrc = '../../../websrc/images/icon_hollys2019.png';				var imageSize = new daum.maps.Size(40, 50);								var imageOption = {offset: new daum.maps.Point(24, 50)};				var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize);
+	
+			if (locX == "" || locY == ""){
+								var geocoder = new daum.maps.services.Geocoder();
+	
+								geocoder.addressSearch(address, function(result, status) {
+	
+										if(status === daum.maps.services.Status.OK) {
+						var coords = new daum.maps.LatLng(result[0].y, result[0].x);
+	
+												var marker = new daum.maps.Marker({
+							map: map,
+							position: coords,
+							image: markerImage
+						});
+	
+												map.setCenter(coords);
+					}
+				});
+			}else{
+				var markerPosition  = new daum.maps.LatLng(locX, locY);
+	
+								var marker = new daum.maps.Marker({
+				    position: markerPosition,
+				    image: markerImage
+				});
+	
+				marker.setMap(map);
+			}
+		setTimeout(function(){
+						window.print();
+					},1000);
+		}
+		
+		function codeAddress() {
+			var address = sadd[pno];
+			var image   = '../../../websrc/images/icon_hollys2019.gif';
+			
+			geocoder.geocode( { 'address': address}, function(results, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+					map.setCenter(results[0].geometry.location);
+					var marker = new google.maps.Marker({
+						map: map, 
+						icon : image,
+						position: results[0].geometry.location
+					});
+					setTimeout(function(){
+						window.print();
+					},1000);
+				} else {
+					alert("Geocode was not successful for the following reason: " + status);
+				}
+			});
+		}
+		
+		initialize();	
+		
+		$('.btnType01').on('click', function() {
+			window.close();
+		});
+    });
+</script>  
+
+	<div class="wr_popup">
+		<div class="pop_tit">약도출력</div>
+		<div class="pop_con">			
+			<div id="map_canvas" style="width:610px; height:458px; background:#ffcccf; margin:0 auto">
+
+			</div>		
+			
+			<div class="tableType01" style="width:610px; margin:20px auto 0;">
+				<table summary="">
+					<caption></caption>
+					<colgroup>
+						<col width="25%" />
+						<col width="75%" />
+					</colgroup>
+					<tbody>
+					<tr>
+						<th scope="row">매장명</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th scope="row">주소</th>
+						<td></td>
+					</tr>
+					<tr class="noline">
+						<th scope="row">전화번호</th>
+						<td></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="btn_pop01">
+				<!--<a href="#" class="btnType01">출력</a>-->
+				<a href="#" class="btnType01">닫기</a>
+			</div>
+			 			
+		</div>
+	</div>
+
+
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-60787265-1', 'auto');
+  ga('create', 'UA-89313435-1', 'auto', {'allowLinker': true});
+  ga('create', 'UA-89313435-3', 'auto', {'allowLinker': true});
+  ga('require', 'linker');
+  ga('linker:autoLink', ['dechocolatecoffeeand.co.kr'], ['m.hollys.co.kr'] );
+  ga('send', 'pageview');
+  ga('allowLinker.send', 'pageview');
+
+</script>
+
+<script type="text/javascript">
+    var roosevelt_params = {
+        retargeting_id:'Bhpew1IQjC7I3AufHKyVCw00',
+        tag_label:'J0YgM6vuQIa5MynbLVqwaw'
+    };
+</script>
+<!-- <script type="text/javascript" src="//adimg.daumcdn.net/rt/roosevelt.js" async></script> -->
+<script type="text/javascript" src="../../../../wcs.naver.net/wcslog.js"> </script> 
+<script type="text/javascript"> 
+if (!wcs_add) var wcs_add={};
+wcs_add["wa"] = "s_305689c5855e";
+if (!_nasa) var _nasa={};
+wcs.inflow();
+wcs_do(_nasa);
+</script>
+</body>
+
+<!-- Mirrored from www.hollys.co.kr/hollysIs/location/pop/locationPop.do by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 12 Jun 2024 08:08:03 GMT -->
+</html>
